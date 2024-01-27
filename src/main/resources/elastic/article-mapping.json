@@ -1,0 +1,10 @@
+{
+  "properties" : {
+    "id" : {"type" : "keyword"},
+    "title" : {"type" :  "text"},
+    "content" : {"type" :  "text"},
+    "userId" : {"type" :  "long"},
+    "password" : {"type" : "text"},
+    "articleEnum" : {"type" :  "text"}
+  }
+}
