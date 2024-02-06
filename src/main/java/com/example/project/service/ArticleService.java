@@ -1,16 +1,11 @@
 package com.example.project.service;
 
-import com.example.project.dto.ArticleAllSaveDto;
-import com.example.project.dto.ArticleResponseDto;
-import com.example.project.dto.SearchDto;
-import com.example.project.entity.Article;
+import com.example.project.dto.*;
 import com.example.project.entity.ArticleDocument;
-import com.example.project.entity.User;
 import com.example.project.repository.ArticleRepository;
 import com.example.project.repository.ArticleSearchQueryRepository;
 import com.example.project.repository.ArticleSearchRepository;
 import com.example.project.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,17 +22,7 @@ public class ArticleService {
     private final UserRepository userRepository;
     private final ArticleSearchQueryRepository articleSearchQueryRepository;
 
-    @Transactional
-    public void saveAllArticle(List<ArticleAllSaveDto> dtos){
-        List<Article> articleList = dtos.stream()
-                .map(dto -> {
-                    User user = userRepository.findById(dto.getUserId())
-                            .orElseThrow(()-> new EntityNotFoundException("해당 유저가 없습니다."));
-                    return Article.allSaveFrom(dto,user);
-                })
-                .toList();
-        articleRepository.saveAll(articleList);
-    }
+
     @Transactional
     public void saveAllArticleDocument(){
         List<ArticleDocument> articleDocumentList = articleRepository.findAll().stream()
@@ -67,6 +52,26 @@ public class ArticleService {
         return articleSearchQueryRepository.findBySearchDto(searchDto)
                 .stream()
                 .map(ArticleResponseDto::from)
+                .collect(Collectors.toList());
+    }
+
+    public List<ArticleResponseDto> findByWord(String word) {
+        return articleSearchQueryRepository.findByWord(word)
+                .stream()
+                .map(ArticleResponseDto::from)
+                .collect(Collectors.toList());
+    }
+    public List<ArticleResponseDto> findByContainWord(String word){
+        return articleSearchQueryRepository.findByContainWord(word)
+                .stream()
+                .map(ArticleResponseDto::from)
+                .collect(Collectors.toList());
+    }
+
+    public List<SuggestDto> findBySuggestWord(String input){
+        return articleSearchQueryRepository.findBySuggestWord(input)
+                .stream()
+                .map(SuggestDto::from)
                 .collect(Collectors.toList());
     }
 }
