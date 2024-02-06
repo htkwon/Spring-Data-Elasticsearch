@@ -31,7 +31,8 @@ SpringData Elasticsearch + Logstash + Kibana 연동 프로젝트
 
 ## 프로젝트 구성도 🗺️
 
-<img width="604" alt="프로젝트 구성도" src="https://github.com/htkwon/Spring-Data-Elasticsearch/assets/117131575/5a353310-7374-4c27-8119-3e2e01e6d48c">
+<img width="568" alt="rela dia" src="https://github.com/htkwon/Spring-Data-Elasticsearch/assets/117131575/82a4a3e5-a806-4da4-b25a-e83c55ccb13a">
+
 
 --- 
 
