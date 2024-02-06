@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elasticsearch Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #searchInput {
+            padding: 10px;
+            width: 300px;
+        }
+        #searchButton {
+            padding: 10px;
+        }
+        #searchResults {
+            margin-top: 20px;
+        }
+        .autocomplete-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            border: 1px solid #ccc;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .autocomplete-item {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .autocomplete-item:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Elasticsearch Search</h1>
+
+<form action="#" th:action="@{/article/search}" method="get">
+    <input type="text" id="searchInput" name="word" placeholder="검색어 입력">
+    <button type="submit" id="searchButton">검색</button>
+</form>
+
+<div id="searchResults">
+    <h2 th:if="${not #lists.isEmpty(searchResults)}">검색 결과</h2>
+    <div th:each="result : ${searchResults}">
+        <h3 th:text="${result.title}"></h3>
+        <p th:text="${result.content}"></p>
+    </div>
+    <p th:if="${#lists.isEmpty(searchResults)}">검색 결과가 없습니다.</p>
+</div>
+
+<!-- 자동 완성 검색어 결과를 표시할 리스트 -->
+<ul id="autocompleteList" class="autocomplete-list"></ul>
+
+<script>
+    function getAutocomplete() {
+        var inputElement = document.getElementById("searchInput");
+        var autocompleteList = document.getElementById("autocompleteList");
+
+        fetch("/api/auto-complete?input=" + inputElement.value)
+            .then(response => response.json())
+            .then(data => {
+                // 가져온 자동 완성 검색어를 리스트에 표시
+                autocompleteList.innerHTML = "";
+                data.forEach(item => {
+                    var listItem = document.createElement("li");
+                    listItem.classList.add("autocomplete-item");
+                    listItem.textContent = item.suggest;
+                    listItem.onclick = function() {
+                        inputElement.value = item.suggest;
+                        autocompleteList.innerHTML = "";
+                        console.log("Clicked on suggestion:", item.suggest);
+                    };
+                    autocompleteList.appendChild(listItem);
+                });
+            }).catch(error => {
+                console.error("Error fetching autocomplete data:", error);
+            });
+    }
+
+    document.getElementById("searchInput").addEventListener("input",getAutocomplete);
+</script>
+
+</body>
+</html>
