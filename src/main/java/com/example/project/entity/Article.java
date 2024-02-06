@@ -1,7 +1,6 @@
 package com.example.project.entity;
 
 import com.example.project.ArticleEnum;
-import com.example.project.dto.ArticleAllSaveDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,14 +33,6 @@ public class Article {
         this.content = content;
         this.user = user;
         this.articleEnum = ArticleEnum.valueOf(articleEnum);
-    }
-    public static Article allSaveFrom(ArticleAllSaveDto dto,User user){
-        return new Article(
-                dto.getTitle(),
-                dto.getContent(),
-                user,
-                dto.getArticleEnum()
-        );
     }
 
 }

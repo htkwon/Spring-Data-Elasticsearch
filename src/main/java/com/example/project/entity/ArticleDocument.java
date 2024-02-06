@@ -3,9 +3,11 @@ package com.example.project.entity;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.elasticsearch.annotations.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @Document(indexName = "article")
 @Mapping(mappingPath = "elastic/article-mapping.json")
